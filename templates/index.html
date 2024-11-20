@@ -1,28 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <title>{{user.name}}'s watchlist</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}" type="text/css">
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-</head>
-<body>
-    <h2>
-        <img alt="Avatar" class="avatar" src="{{ url_for('static',filename='images/lgcx.gif') }}">
-        {{user.name}}'s watchlist
-    </h2>
-    {# 使用 length 过滤器获取 movies 变量的长度 #}
-    <p>{{movies|length}} Titles</p>
-    <ul class="movie-list">
-        {% for movie in movies %} {#迭代movie变量#}
-        <li>{{movie.title}}--{{movie.year}}</li>
-        {% endfor %}    {#使用endfor标签结束for语句#}
-    </ul>
-    
-    <img alt="tafei" class="zhayan" src="{{ url_for('static',filename='images/zhayan.gif') }}">
-    <footer>
-        <small>&copy; 2018 <a href="http://helloflask.com/book/3">HelloFlask</a></small>
-    </footer>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<!-- 添加创建新条目表单 -->
+<p>{{movies|length}}Movies</p>
+<form method="post">
+    Name<input type="text" name="title" id="title" autocomplete="off" required>
+    Year<input type="text" name="year" id="year" autocomplete="off" required>
+    <input class="btn" name="submit" type="submit" value="Add">
+</form>
+
+{# 使用 length 过滤器获取 movies 变量的长度 #}
+<!-- <p>{{movies|length}} Movies</p> -->
+<ul class="movie-list">
+    {% for movie in movies %} {#迭代movie变量#}
+    <li>
+        {{movie.title}}--{{movie.year}}
+        <span class="float-right">
+            <!--编辑电影-->
+            <a class="btn" href="{{url_for('edit',movie_id=movie.id)}}">Edit</a>
+            <!--删除电影条目表单-->
+            <form class="inline-form" method="post" action="{{url_for('delete',movie_id=movie.id)}}" >
+                <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
+            </form>
+            <a class="movie-url" href="https://movie.douban.com/subject_search?search_text={{ movie.title }}"
+                target="_blank" title="Find this movie on 豆瓣">豆瓣</a>
+        </span>
+    </li>
+    {% endfor %} {#使用endfor标签结束for语句#}
+</ul>
+<img alt="tafei" class="zhayan" src="{{ url_for('static',filename='images/zhayan.gif') }}">
+{% endblock %}
