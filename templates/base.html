@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% block head %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-sacle=1.0 ">
     <title>{{user.name}}'s Watchlist</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" >
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}" type="text/css">
     {% endblock %}
 </head>
+
 <body>
     <!--插入到页面标题上方-->
     <!-- 用 get_flashed_messages() 函数获取提示消息并显示 -->
     {% for message in get_flashed_messages() %}
-        <div class="alert">{{message}}</div>
+    <div class="alert">{{message}}</div>
     {% endfor %}
 
     <h2>
@@ -22,12 +24,19 @@
     </h2>
     <nav>
         <ul>
-            <li><a href="{{url_for('index')}}" >Home</a></li>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('settings')}}">Settings</a></li>
+            <li><a href="{{url_for('logout')}}">Logout</a></li>
+            {% else %}
+            <li><a href="{{url_for('login')}}"> Login</a></li>
+            {% endif %}
         </ul>
     </nav>
     {% block content %} {% endblock %}
     <footer>
-        <small>&copy;<a href="https://space.bilibili.com/351315497/cinema">我的b站片单</small>
+        <small>&copy;<a href="https://space.bilibili.com/351315497/cinema">我的b站片单</a></small>
     </footer>
 </body>
+
 </html>
