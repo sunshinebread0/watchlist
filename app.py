@@ -81,7 +81,7 @@ def admin(username, password):
         db.session.add(user)
 
     db.session.commit()
-    click.echo('Done')
+    click.echo('Done.')
 
 
 #  初始化flask-login
@@ -98,7 +98,7 @@ def initdb(drop):
     if drop:  # 判断是否输入了选项
         db.drop_all()
     db.create_all()
-    click.echo("Initialize the database")  # 提示输出信息
+    click.echo("Initialized database.")  # 提示输出信息
 
 
 # app = Flask(__name__)
@@ -146,13 +146,13 @@ def index():
         year = request.form.get("year")
         # 验证数据
         if not title or not year or len(year) != 4 or len(title) > 60:
-            flash("Invalid input")  # 显示错误提示
+            flash("Invalid input.")  # 显示错误提示
             return redirect((url_for('index')))  # 重定向页面
         # 保存表单数据到数据库
         movie = Movie(title=title, year=year)  # 创建记录
         db.session.add(movie)  # 添加数据到会话
         db.session.commit()  # 提交数据会话
-        flash("Item Created")  # 显示成功创建的的提示
+        flash("Item Created.")  # 显示成功创建的的提示
         return redirect(url_for('index'))
 
     movies = Movie.query.all()
@@ -182,14 +182,13 @@ def edit(movie_id):
     return render_template('edit.html', movie=movie)  # 传入被编辑的电影记录
 
 
-# 删除电影条目
 @app.route("/movie/delete/<int:movie_id>", methods=['POST'])  # 只接受post请求
 @login_required  # 登陆保护
 def delete(movie_id):
     movie = Movie.query.get_or_404(movie_id)  # 获取数据
     db.session.delete(movie)  # 删除数据
     db.session.commit()  # 交付
-    flash("Item Deleted")  # 提示
+    flash("Item deleted.")  # 提示
     return redirect(url_for('index'))  # 重定向回主页
 
 
@@ -200,7 +199,7 @@ def settings():
         name = request.form['name']
 
         if not name or len(name) > 20:
-            flash("Invalidate input")
+            flash("Invalid input.")
             return redirect(url_for('settings'))
 
         # current_user.name = name
@@ -209,7 +208,7 @@ def settings():
         user = User.query.first()
         user.name = name
         db.session.commit()
-        flash('Settings update.')
+        flash('Settings updated.')
         return redirect(url_for('index'))
 
     return render_template('settings.html')
